@@ -24,13 +24,14 @@ def isaddr(addr):
     pass
   return False
 
+
 def resolve(addr, v4only=False, v6only=False):
   proto = socket.SOL_TCP
   family = 0
   if isaddr(addr):
     return addr
 
-  assert not (v4only and v6only),
+  assert not (v4only and v6only), \
     "either v4only or v6nly"
   if v4only:
     family == socket.AF_INET
@@ -40,6 +41,8 @@ def resolve(addr, v4only=False, v6only=False):
   return random.choice(r)[4][0]
 
 
+def r6(addr):
+  return resolve(addr, v6only=True)
 
 class Log:
   def __init__(self, name):

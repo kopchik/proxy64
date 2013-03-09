@@ -1,10 +1,19 @@
 pkgname='proxy64'
 pkgver=`date +%G%m%d`
-# pkgver () {
-#   cd "$srcdir/$_gitname"
-#   echo $(git describe --always | sed 's/-/./g')
-# }
+_gitroot=("https://github.com/kopchik/proxy64.git")
+_gitname=proxy64
 pkgrel=1
-
+depends=('python')
+makedepends=('git')
 arch=('any')
 
+build() {
+  git clone $_gitname $_gitname-build
+  cd "$srcdir/$pkgname"
+  python3 ./setup.py build
+}
+
+package() {
+  cd "$srcdir/$pkgname"
+  python3 ./setup.py install
+}

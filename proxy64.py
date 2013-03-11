@@ -36,7 +36,7 @@ def resolve(addr, v4only=False, v6only=False):
   if v4only:
     family == socket.AF_INET
   elif v6only:
-    fimily == socket.AF_INET6
+    family == socket.AF_INET6
   r = socket.getaddrinfo(addr, 6666, family=family, proto=proto)
   return random.choice(r)[4][0]
 

@@ -57,6 +57,9 @@ class Log:
   def debug(self, *args, **kwargs):
     self.log("DEBUG", *args, **kwargs)
 
+  def error(self, *args, **kwargs):
+    self.log("ERROR", *args, **kwargs)
+
 
 class Tun(threading.Thread):
   def __init__(self, s, dst, buf, timeout=1):
@@ -72,7 +75,7 @@ class Tun(threading.Thread):
     try:
       s2 = socket.create_connection(self.dst, self.timeout)
     except Exception as err:
-      self.log(err)
+      self.log.error(err)
       s1.close()
       return
     ss = [s1,s2]

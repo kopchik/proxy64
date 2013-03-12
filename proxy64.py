@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from collections import namedtuple
+from useful import Log
 import threading
 import ipaddress
 import socket
@@ -15,50 +16,6 @@ Mb = 1024*Kb
 
 Addr = namedtuple('Addr', ['ip', 'port'])
 Addr.__str__  = lambda self: "%s:%s" % (self.ip, self.port)
-
-
-def isaddr(addr):
-  try:
-    return ipaddress.ip_address(addr)
-  except:
-    pass
-  return False
-
-
-def resolve(addr, v4only=False, v6only=False):
-  proto = socket.SOL_TCP
-  family = 0
-  if isaddr(addr):
-    return addr
-
-  assert not (v4only and v6only), \
-    "either v4only or v6nly"
-  if v4only:
-    family == socket.AF_INET
-  elif v6only:
-    family == socket.AF_INET6
-  r = socket.getaddrinfo(addr, 6666, family=family, proto=proto)
-  return random.choice(r)[4][0]
-
-
-def r6(addr):
-  return resolve(addr, v6only=True)
-
-class Log:
-  def __init__(self, name):
-    self.name = name
-
-  def log(self, prio, msg):
-    print(self.name, prio, msg)
-
-  def info(self, *args, **kwargs):
-    self.log("INFO", *args, **kwargs)
-
-  def debug(self, *args, **kwargs):
-    self.log("DEBUG", *args, **kwargs)
-
-  def error(self, *args, **kwargs):
-    self.log("ERROR", *args, **kwargs)
 
 
 class Tun(threading.Thread):

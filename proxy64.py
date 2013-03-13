@@ -18,6 +18,7 @@ except ImportError:
 
 Kb = 1024*1024
 Mb = 1024*Kb
+cnt = 0
 
 
 Addr = namedtuple('Addr', ['ip', 'port'])
@@ -26,12 +27,14 @@ Addr.__str__  = lambda self: "%s:%s" % (self.ip, self.port)
 
 class Tun(threading.Thread):
   def __init__(self, s, dst, buf, timeout=1):
+    global cnt
+    cnt += 1
     super().__init__()
     self.s1 = s
     self.dst = dst
     self.buf = buf
     self.timeout = timeout
-    self.log = Log("{}".format(dst))
+    self.log = Log("{} {}".format(dst, cnt))
 
   def run(self):
     s1 = self.s1
@@ -50,14 +53,16 @@ class Tun(threading.Thread):
         for s in ss: s.close()
         return
 
-      for from_ in rlist:
-        to_ = s1 if from_ == s2 else s2
-        data = from_.recv(self.buf)
-        self.log.debug("got from %s: %s" % (from_, data))
+      for FROM in rlist:
+        TO = s1 if FROM == s2 else s2
+        data = FROM.recv(self.buf)
+        self.log.debug("got from %s: %s" % (FROM.getpeername(), data))
         if not data:
+          self.log.debug("connection closed by {}, closing connection".format(FROM))
           for s in ss: s.close()
           return
-        to_.sendall(data)
+        self.log.debug("sending to %s: %s" % (TO.getpeername(), data))
+        TO.sendall(data)
 
 
 class Proxy(threading.Thread):

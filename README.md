@@ -8,6 +8,9 @@ Unlike tinyproxy and other proxies:
 1. Has only neccessary settings
 1. Only python is required to work
 1. It was created by me :)
-1. Supports gevent (TODO)
+
+TODO:
+
+1. Rework debug logging
 
 Note that all addresses are resolved only once on start.

@@ -46,7 +46,7 @@ class Tun(threading.Thread):
       return
     ss = [s1,s2]
     while True:
-      self.log.debug("waiting for events")
+      #if __debug__: self.log.debug("waiting for events")
       rlist, _, xlist = select.select(ss, [], ss)
       if xlist:
         selg.log.info("connection problems on %s" % xlist)
@@ -56,12 +56,11 @@ class Tun(threading.Thread):
       for FROM in rlist:
         TO = s1 if FROM == s2 else s2
         data = FROM.recv(self.buf)
-        self.log.debug("got from %s: %s" % (FROM.getpeername(), data))
+        #if __debug__: self.log.debug("got %s: %s" % (FROM.getpeername(), data))
         if not data:
-          self.log.debug("connection closed by {}, closing connection".format(FROM))
+          #if __debug__: self.log.debug("connection closed by {}, closing connection".format(FROM))
           for s in ss: s.close()
           return
-        self.log.debug("sending to %s: %s" % (TO.getpeername(), data))
         TO.sendall(data)
 
 
@@ -83,10 +82,10 @@ class Proxy(threading.Thread):
     s.bind(self.src)
     s.listen(self.backlog)
     while True:
-      self.log.debug("waiting for incoming connections on {}"
-        .format(self.src))
+      #if __debug__: self.log.debug("waiting for incoming connections on {}"
+      #  .format(self.src))
       conn, addr = s.accept()
-      self.log.info("connection from {}".format(addr))
+      #if __debug__: self.log.debug("connection from {}".format(addr))
       tun = Tun(conn, self.dst, self.buf)
       tun.start()
 

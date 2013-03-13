@@ -1,13 +1,19 @@
 #!/usr/bin/env python3
 
 from collections import namedtuple
-from useful import Log
+from useful.log import Log
 import threading
-import ipaddress
 import socket
 import select
 import syslog
 import random
+try:
+  import ipaddress
+except ImportError:
+  try:
+    import ipaddr as ipaddress
+  except ImportError:
+    raise Exception("you need ipaddr or ipaddress extensions")
 
 
 Kb = 1024*1024

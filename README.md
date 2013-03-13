@@ -24,7 +24,6 @@ USAGE
 
 1. Install it by doing ./setup.py install
 1. Create a config. An example config:
-
 ~~~python
 $ cat /etc/pr64.py
 #!/usr/bin/env python3
@@ -38,14 +37,11 @@ p = Proxy(src=Addr('127.0.0.1', 8081), dst=Addr(r6('kliga.ru'), 80))
 p.start()
 p.join()
 ~~~
-
 1. Run it:
-
 ~~~
 $ chmod +x /etc/pr64.py
 $ ./pr64.py
   23:32:15 info 127.0.0.1:8081 => 2a01:4f8:131:1025::6:80: listening on 127.0.0.1:8081
 ~~~
-
 1. ...
 1. Profit!

@@ -8,7 +8,7 @@ makedepends=('git')
 arch=('any')
 
 build() {
-  git clone $_gitname $_gitname-build
+  git clone $_gitroot $_gitname
   cd "$srcdir/$pkgname"
   python3 ./setup.py build
 }
